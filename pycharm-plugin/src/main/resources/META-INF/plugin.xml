@@ -1,0 +1,21 @@
+<idea-plugin>
+    <id>com.syntaxsurge.bridge.pycharm</id>
+    <name>SyntaxSurge Bridge</name>
+    <vendor>SyntaxSurge</vendor>
+    <description><![CDATA[
+        Отправляет позицию курсора и контекст строк на мост SyntaxSurge (127.0.0.1:8765)
+        для синхронизации с автопечатью кода (gui_typer.py / run.py).
+        Совместим с протоколом моста: line, column, lineContent, lineAbove, lineBelow, source: "pycharm".
+    ]]></description>
+    <depends>com.intellij.modules.platform</depends>
+    <extensions defaultExtensionNs="com.intellij">
+        <postStartupActivity implementation="com.syntaxsurge.bridge.pycharm.SyntaxSurgeBridgeStartupActivity"/>
+        <notificationGroup id="SyntaxSurge Bridge" displayType="BALLOON"/>
+    </extensions>
+    <actions>
+        <action id="SyntaxSurge.CheckConnection"
+                class="com.syntaxsurge.bridge.pycharm.CheckConnectionAction"
+                text="SyntaxSurge: проверить подключение к мосту"
+                description="Проверяет, доступен ли мост на 127.0.0.1:8765"/>
+    </actions>
+</idea-plugin>

@@ -1,0 +1,35 @@
+{
+  "name": "syntaxsurge-bridge",
+  "displayName": "SyntaxSurge Bridge",
+  "description": "Отправляет позицию курсора и контекст строк на мост (127.0.0.1:8765) для синхронизации с автопечатью кода.",
+  "version": "0.1.0",
+  "publisher": "syntaxsurge",
+  "engines": {
+    "vscode": "^1.85.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [
+    "onStartupFinished"
+  ],
+  "main": "./out/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "syntaxsurge-bridge.checkConnection",
+        "title": "SyntaxSurge: проверить подключение к мосту"
+      }
+    ]
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./"
+  },
+  "devDependencies": {
+    "@types/node": "^20.10.0",
+    "@types/vscode": "^1.85.0",
+    "typescript": "^5.3.0"
+  }
+}

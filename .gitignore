@@ -1,0 +1,55 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+venv/
+.venv/
+env/
+*.egg-info/
+.eggs/
+dist/
+build/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Логи и карты (генерируются при работе)
+typer/log/
+typer/map/*.json
+
+# Тесты (локальные)
+tests/
+
+# Пустые/вспомогательные папки
+scripts/
+tools/
+
+# Node (vscode-extension)
+node_modules/
+
+# PyCharm plugin
+pycharm-plugin/build/
+pycharm-plugin/.gradle/
+pycharm-plugin/gradle-8.5/
+pycharm-plugin/gradle-8.5-bin.zip
+
+# Модели (sherpa-onnx, >50 MB)
+models/
+
+# Сборки
+*.vsix
+*.jar
+
+# Секреты
+.env
+.env.local
+*.key
+
+# OS
+.DS_Store
+Thumbs.db
