@@ -5,7 +5,14 @@
 """
 import os
 
-_ICONS_DIR = os.path.join(os.path.dirname(__file__), "icons", "app")
+from runtime_paths import get_resource_base, get_data_base, is_frozen
+
+if is_frozen():
+    _ICONS_DIR = os.path.join(get_resource_base(), "gui", "icons", "app")
+    _ICONS_CACHE_DIR = os.path.join(get_data_base(), "cache", "gui", "icons", "app")
+else:
+    _ICONS_DIR = os.path.join(os.path.dirname(__file__), "icons", "app")
+    _ICONS_CACHE_DIR = _ICONS_DIR
 
 
 def icon_dir() -> str:
@@ -76,9 +83,10 @@ def ensure_check_orange_png(color_hex: str = "#FF9900", size: int = 20) -> str:
     """
     Рендерит оранжевую галочку в PNG для чекбокса. Создаёт check_orange.png
     в gui/icons/app и возвращает абсолютный путь. Если файл уже есть — возвращает путь.
+    В frozen-режиме пишет в кэш рядом с exe.
     """
     png_name = "check_orange.png"
-    png_path = os.path.join(_ICONS_DIR, png_name)
+    png_path = os.path.join(_ICONS_CACHE_DIR, png_name)
     if os.path.isfile(png_path):
         return os.path.abspath(png_path)
     try:
@@ -98,7 +106,7 @@ def ensure_check_orange_png(color_hex: str = "#FF9900", size: int = 20) -> str:
         painter = QPainter(pixmap)
         renderer.render(painter, pixmap.rect())
         painter.end()
-        os.makedirs(_ICONS_DIR, exist_ok=True)
+        os.makedirs(_ICONS_CACHE_DIR, exist_ok=True)
         pixmap.save(png_path)
         return os.path.abspath(png_path)
     except Exception:

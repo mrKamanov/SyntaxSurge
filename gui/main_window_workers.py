@@ -108,6 +108,8 @@ def _parse_block_tips(text: str) -> dict:
 
 def pip_install_rapidocr_command() -> str:
     """Команда установки rapidocr для копирования в терминал (PowerShell на Windows — с &)."""
+    if getattr(sys, "frozen", False):
+        return "pip install rapidocr onnxruntime  # exe не поддерживает -m pip, установите через Python"
     exe = sys.executable
     if os.name == "nt":
         return f'& "{exe}" -m pip install rapidocr onnxruntime'
@@ -166,11 +168,14 @@ class ApiRequestWorker(QObject):
         if not chat_completion:
             self.finished.emit(False, "Модуль api_client не найден. Установите openai: pip install openai")
             return
-        messages = [{"role": "user", "content": self.user_message}]
-        success, text = chat_completion(
-            self.base_url, self.api_key, self.model, self.auth_type, messages
-        )
-        self.finished.emit(success, text)
+        try:
+            messages = [{"role": "user", "content": self.user_message}]
+            success, text = chat_completion(
+                self.base_url, self.api_key, self.model, self.auth_type, messages
+            )
+            self.finished.emit(success, text)
+        except Exception as e:
+            self.finished.emit(False, f"Ошибка API: {type(e).__name__}: {e}")
 
 
 class ScreenshotSendWorker(QObject):

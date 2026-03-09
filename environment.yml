@@ -1,0 +1,24 @@
+# Conda-окружение для сборки SyntaxSurge (Miniconda)
+# Создание: conda env create -f environment.yml
+# Активация: conda activate syntaxsurge-build
+
+name: syntaxsurge-build
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - python=3.12
+  - pip
+  # PortAudio — sounddevice подхватит из conda
+  - portaudio
+  - pip:
+    - PySide6>=6.4
+    - openai>=1.0
+    - pygments>=2.15
+    - pynput>=1.7
+    - pyautogui>=0.9.50
+    - rapidocr>=3.3
+    - onnxruntime>=1.14
+    - sherpa-onnx>=1.9
+    - sounddevice>=0.4.6
+    - pyinstaller>=6.0

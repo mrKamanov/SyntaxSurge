@@ -11,16 +11,30 @@
 ```bash
 git clone <url-репозитория> SyntaxSurge
 cd SyntaxSurge
-pip install -r requirements.txt
+setup_venv.bat
 ```
 
-## Шаг 2: Проверка установки
+Скрипт создаёт виртуальное окружение `.venv` и устанавливает зависимости. Либо вручную: `python -m venv .venv`, затем `pip install -r requirements_install.txt`.
+
+## Шаг 2: Запуск
 
 ```bash
-python run_gui.py
+run.bat
 ```
 
-Должно открыться главное окно приложения.
+Или: `python run_gui.py` (после активации `.venv`). Cursor/VSCode автоматически подхватит интерпретатор из `.vscode/settings.json`.
+
+## Сборка в exe (PyInstaller)
+
+```bash
+build_conda.bat
+```
+
+Требуется [Miniconda](https://docs.conda.io/en/latest/miniconda.html). При первом запуске создаётся окружение `syntaxsurge-build` с PortAudio из conda-forge — это устраняет проблемы с `libportaudio64bit.dll`.
+
+Готовый exe: `dist\SyntaxSurge.exe`. При первом запуске рядом с exe создаются папки `typer_data` (карты, логи) и `cache` (кэш иконок).
+
+**Модели помощника (голос):** папка `models` рядом с exe, в ней файлы: `encoder.chunk64.onnx`, `decoder.chunk64.onnx`, `joiner.chunk64.onnx`, `tokens.txt`. Скачайте из [sherpa-onnx](https://github.com/k2-fsa/sherpa-onnx).
 
 ## Опциональные компоненты
 

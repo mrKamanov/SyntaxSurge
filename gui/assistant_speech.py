@@ -107,6 +107,7 @@ def run_recognition_loop(
     input_sample_rate: int = DEFAULT_INPUT_SAMPLE_RATE,
     channels: int = 1,
     mute_event: Optional[threading.Event] = None,
+    shared_recognizer: Optional[Any] = None,
 ) -> None:
     """
     Запускает цикл распознавания в текущем потоке (обычно worker thread).
@@ -126,7 +127,7 @@ def run_recognition_loop(
         return
 
     try:
-        recognizer = create_recognizer(models_dir, model_sample_rate=model_sample_rate)
+        recognizer = shared_recognizer if shared_recognizer is not None else create_recognizer(models_dir, model_sample_rate=model_sample_rate)
     except Exception as e:
         _cb(f"Ошибка загрузки модели: {e}", True)
         return

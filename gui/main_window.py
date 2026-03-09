@@ -1793,6 +1793,14 @@ class GlassMainWindow(QMainWindow):
         def on_text(text: str, is_final: bool, role: str):
             self.assistant_text_signal.emit(text, is_final, role)
 
+        # Один recognizer на оба потока — иначе "cannot load module more than once per process" (onnxruntime)
+        shared_recognizer = None
+        try:
+            shared_recognizer = _assistant_speech_module.create_recognizer(audio_devices.ASSISTANT_MODELS_DIR)
+        except Exception as e:
+            self.assistant_text_signal.emit(f"Ошибка загрузки модели: {e}", True, "user")
+            return
+
         def run_user():
             _assistant_speech_module.run_recognition_loop(
                 audio_devices.ASSISTANT_MODELS_DIR,
@@ -1801,6 +1809,7 @@ class GlassMainWindow(QMainWindow):
                 stop_event=self._assistant_stop_event,
                 role="user",
                 mute_event=self._assistant_mute_user_event,
+                shared_recognizer=shared_recognizer,
             )
 
         def run_interlocutor():
@@ -1813,6 +1822,7 @@ class GlassMainWindow(QMainWindow):
                 role="interlocutor",
                 input_sample_rate=44100,
                 channels=2,
+                shared_recognizer=shared_recognizer,
             )
 
         def run_orchestrator():
@@ -2963,7 +2973,8 @@ class GlassMainWindow(QMainWindow):
             self.main_tabs.setCurrentIndex(0)
             self.response_edit.setPlainText("Распознавание текста...")
             self.send_btn.setEnabled(False)
-            project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+            from runtime_paths import get_data_base, is_frozen
+            project_root = get_data_base() if is_frozen() else os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
             process = QProcess(self)
             process.setWorkingDirectory(project_root)
             process.finished.connect(

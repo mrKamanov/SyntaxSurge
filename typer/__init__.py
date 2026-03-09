@@ -6,10 +6,14 @@
 
 import os
 
+from runtime_paths import get_data_base, is_frozen
+
 # Пути — определяем до импорта code_printer (он импортирует LOG_FILE)
+# В frozen-режиме (exe) — map/log рядом с exe
 _typer_dir = os.path.dirname(os.path.abspath(__file__))
-MAP_DIR = os.path.join(_typer_dir, "map")
-LOG_DIR = os.path.join(_typer_dir, "log")
+_data_dir = os.path.join(get_data_base(), "typer_data") if is_frozen() else _typer_dir
+MAP_DIR = os.path.join(_data_dir, "map")
+LOG_DIR = os.path.join(_data_dir, "log")
 LOG_FILE = os.path.join(LOG_DIR, "typer_log.log")
 
 from typer.code_mapper import CodeMapBuilder, CodeMap, CodeElement, ElementType

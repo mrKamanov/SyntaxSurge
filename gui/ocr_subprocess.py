@@ -170,6 +170,7 @@ def _extract_text(result) -> str:
 
 def run_ocr(image_path: str) -> str:
     try:
+        import numpy  # noqa: F401 — инициализация до rapidocr (PyInstaller)
         from rapidocr import (  # type: ignore[import-untyped]
             RapidOCR,
             LangDet,

@@ -11,7 +11,13 @@ except ImportError:
     sounddevice_available = False
     sd = None
 
-_PROJECT_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+from runtime_paths import get_data_base, is_frozen
+
+_PROJECT_ROOT = (
+    get_data_base()
+    if is_frozen()
+    else os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+)
 ASSISTANT_MODELS_DIR = os.path.join(_PROJECT_ROOT, "models")
 ASSISTANT_MODEL_FILES = ("encoder.chunk64.onnx", "decoder.chunk64.onnx", "joiner.chunk64.onnx")
 
